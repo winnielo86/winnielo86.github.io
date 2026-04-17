@@ -191,6 +191,29 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.22); }
   .detail-body { padding: 28px 24px; }
   .detail-nav { padding: 16px 24px; }
 }
+
+/* SOFTWARE ICONS */
+#software { background: var(--surface); padding: 80px 64px; }
+.software-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 48px; }
+.sw-item { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 52px; cursor: default; }
+.sw-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.sw-icon:hover { transform: translateY(-3px) scale(1.08); }
+.sw-label { font-size: 9px; color: var(--muted); font-weight: 300; text-align: center; line-height: 1.3; }
+.sw-ps   { background:#001E36; box-shadow:0 3px 10px rgba(49,168,237,0.15); } .sw-ps:hover   { box-shadow:0 6px 22px rgba(49,168,237,0.6); }
+.sw-ai   { background:#330000; box-shadow:0 3px 10px rgba(255,122,0,0.15); }  .sw-ai:hover   { box-shadow:0 6px 22px rgba(255,122,0,0.6); }
+.sw-lr   { background:#001A2B; box-shadow:0 3px 10px rgba(65,182,230,0.15); } .sw-lr:hover   { box-shadow:0 6px 22px rgba(65,182,230,0.6); }
+.sw-id   { background:#1A0027; box-shadow:0 3px 10px rgba(255,99,198,0.15); } .sw-id:hover   { box-shadow:0 6px 22px rgba(255,99,198,0.6); }
+.sw-pr   { background:#00005B; box-shadow:0 3px 10px rgba(153,153,255,0.15);} .sw-pr:hover   { box-shadow:0 6px 22px rgba(153,153,255,0.6); }
+.sw-dw   { background:#000F1A; box-shadow:0 3px 10px rgba(73,200,235,0.15); } .sw-dw:hover   { box-shadow:0 6px 22px rgba(73,200,235,0.6); }
+.sw-dn   { background:#001A2E; box-shadow:0 3px 10px rgba(0,168,255,0.15); }  .sw-dn:hover   { box-shadow:0 6px 22px rgba(0,168,255,0.6); }
+.sw-fg   { background:#1A1A1A; box-shadow:0 3px 10px rgba(163,102,246,0.15);} .sw-fg:hover   { box-shadow:0 6px 22px rgba(163,102,246,0.65); }
+.sw-cd   { background:#006633; box-shadow:0 3px 10px rgba(0,200,100,0.15); }  .sw-cd:hover   { box-shadow:0 6px 22px rgba(0,200,100,0.6); }
+.sw-ac   { background:#003366; box-shadow:0 3px 10px rgba(0,100,200,0.15); }  .sw-ac:hover   { box-shadow:0 6px 22px rgba(0,100,200,0.6); }
+.sw-pd   { background:#1A0033; box-shadow:0 3px 10px rgba(150,50,255,0.15); } .sw-pd:hover   { box-shadow:0 6px 22px rgba(150,50,255,0.6); }
+.sw-cs   { background:#1A0A00; box-shadow:0 3px 10px rgba(255,100,30,0.15); } .sw-cs:hover   { box-shadow:0 6px 22px rgba(255,100,30,0.6); }
+.sw-html { background:#1A0E00; box-shadow:0 3px 10px rgba(228,77,38,0.15); }  .sw-html:hover { box-shadow:0 6px 22px rgba(228,77,38,0.65); }
+.sw-css  { background:#001229; box-shadow:0 3px 10px rgba(38,77,228,0.15); }  .sw-css:hover  { box-shadow:0 6px 22px rgba(38,77,228,0.65); }
+
 </style>
 </head>
 <body>
@@ -346,6 +369,34 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.22); }
     </div>
   </div>
 </section>
+
+<!-- SOFTWARE ICONS -->
+<section id="software">
+  <div class="container">
+    <div class="section-header reveal">
+      <div>
+        <p class="section-label">Tools</p>
+        <h2 class="section-title">使用軟體</h2>
+      </div>
+    </div>
+    <div class="software-grid reveal">
+      <div class="sw-item"><div class="sw-icon sw-ps"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#001E36"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#31A8ED">Ps</text></svg></div><span class="sw-label">Photoshop</span></div>
+      <div class="sw-item"><div class="sw-icon sw-ai"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#330000"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#FF7A00">Ai</text></svg></div><span class="sw-label">Illustrator</span></div>
+      <div class="sw-item"><div class="sw-icon sw-lr"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#001A2B"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#41B6E6">Lr</text></svg></div><span class="sw-label">Lightroom</span></div>
+      <div class="sw-item"><div class="sw-icon sw-id"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#1A0027"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#FF63C6">Id</text></svg></div><span class="sw-label">InDesign</span></div>
+      <div class="sw-item"><div class="sw-icon sw-pr"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#00005B"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#9999FF">Pr</text></svg></div><span class="sw-label">Premiere</span></div>
+      <div class="sw-item"><div class="sw-icon sw-dw"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#000F1A"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#49C8EB">Dw</text></svg></div><span class="sw-label">Dreamweaver</span></div>
+      <div class="sw-item"><div class="sw-icon sw-dn"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#001A2E"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#00A8FF">Dn</text></svg></div><span class="sw-label">Dimension</span></div>
+      <div class="sw-item"><div class="sw-icon sw-fg"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#1A1A1A"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="13" fill="#A366F6">Fg</text></svg></div><span class="sw-label">Figma</span></div>
+      <div class="sw-item"><div class="sw-icon sw-cd"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#006633"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="11" fill="#00FF88">CDr</text></svg></div><span class="sw-label">CorelDraw</span></div>
+      <div class="sw-item"><div class="sw-icon sw-ac"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#003366"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="11" fill="#4DA6FF">CAD</text></svg></div><span class="sw-label">AutoCAD</span></div>
+      <div class="sw-item"><div class="sw-icon sw-pd"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#1A0033"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="11" fill="#C864FF">威力</text></svg></div><span class="sw-label">威力導演</span></div>
+      <div class="sw-item"><div class="sw-icon sw-cs"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#1A0A00"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="11" fill="#FF641E">CSP</text></svg></div><span class="sw-label">Clip Studio</span></div>
+      <div class="sw-item"><div class="sw-icon sw-html"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#1A0E00"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="10" fill="#E44D26">HTML</text></svg></div><span class="sw-label">HTML</span></div>
+      <div class="sw-item"><div class="sw-icon sw-css"><svg width="36" height="36" viewBox="0 0 36 36"><rect width="36" height="36" rx="6" fill="#001229"/><text x="18" y="24" text-anchor="middle" font-family="Arial" font-weight="700" font-size="11" fill="#264DE4">CSS</text></svg></div><span class="sw-label">CSS</span></div>
+    </div>
+  </div>
+</section>  
 
 <!-- CONTACT -->
 <section id="contact">
