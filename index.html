@@ -120,27 +120,48 @@ section { padding: 100px 64px; }
 .gallery-item.wide { grid-column: span 2; aspect-ratio: 2/1; }
 .gallery-item.wide-full { grid-column: span 2; aspect-ratio: 2/1; }
 
-/* LIGHTBOX */
-#lightbox {
+/* WORK MODAL */
+#work-modal {
   display: none; position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,0.88); backdrop-filter: blur(6px);
-  align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 24px;
 }
-#lightbox.open { display: flex; }
-#lightbox img {
-  max-width: 90vw; max-height: 88vh;
-  object-fit: contain; border-radius: 4px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+#work-modal.open { display: flex; }
+.modal-wrap { position: relative; width: 100%; max-width: 860px; }
+.modal-box {
+  background: #fff; border-radius: 12px;
+  width: 100%; max-height: 88vh;
+  overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.4);
 }
-.lightbox-close {
-  position: fixed; top: 24px; right: 32px;
-  width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-  color: #fff; font-size: 22px; cursor: pointer;
+.modal-img {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; flex-shrink: 0;
+  background: var(--surface);
+}
+.modal-body { padding: 32px 40px 40px; overflow-y: auto; flex: 1; }
+.modal-label {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 12px;
+}
+.modal-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(26px, 4vw, 40px);
+  letter-spacing: -0.02em; color: var(--black);
+  line-height: 1.05; margin-bottom: 0;
+}
+.modal-title em { font-style: italic; color: var(--accent); }
+.modal-desc { font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.9; margin-top: 16px; }
+.modal-close {
+  position: absolute; top: -52px; right: 0;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+  color: #fff; font-size: 18px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
+  transition: background 0.2s; font-family: inherit;
 }
-.lightbox-close:hover { background: rgba(255,255,255,0.25); }
+.modal-close:hover { background: rgba(255,255,255,0.3); }
 .g-overlay-link {
   display: inline-block; margin-top: 12px;
   font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
@@ -151,6 +172,7 @@ section { padding: 100px 64px; }
 }
 .g-overlay-link:hover { border-color: var(--accent); color: var(--accent); }
 .gallery-item:hover .g-overlay-link { opacity: 1; transform: translateY(0); }
+.gallery-item.has-modal { cursor: pointer; }
 .gallery-item .g-placeholder {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
@@ -331,10 +353,22 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.22); }
   </div>
 </section>
 
-<!-- LIGHTBOX -->
-<div id="lightbox" onclick="closeLightbox(event)">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightbox-img" src="" alt="">
+<!-- WORK MODAL -->
+<div id="work-modal" onclick="closeModal(event)">
+  <div class="modal-wrap">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-box">
+      <img class="modal-img" id="modal-img" src="" alt="">
+      <div class="modal-body">
+        <div class="modal-label">
+          <span id="modal-cat"></span>
+          <span id="modal-year"></span>
+        </div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-desc" id="modal-desc"></p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- FULLWIDTH GALLERY -->
@@ -457,69 +491,76 @@ footer p { font-size: 12px; color: rgba(255,255,255,0.22); }
 </footer>
 
 <script>
-/* ─── Lightbox ─── */
-function openLightbox(src) {
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox').classList.add('open');
+/* ─── Work Modal ─── */
+function openModal(data) {
+  document.getElementById('modal-img').src = data.img;
+  document.getElementById('modal-cat').textContent = data.cat || '';
+  document.getElementById('modal-year').textContent = data.year ? '· ' + data.year : '';
+  document.getElementById('modal-title').innerHTML = data.title || '';
+  document.getElementById('modal-desc').textContent = data.desc || '';
+  document.getElementById('work-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeLightbox(e) {
-  if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
-  document.getElementById('lightbox').classList.remove('open');
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('work-modal') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('work-modal').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox({target: document.getElementById('lightbox')}); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { document.getElementById('work-modal').classList.remove('open'); document.body.style.overflow = ''; }
+});
 
-/* ─── Gallery build — 16 items ─── */
-/*
-  ─── Gallery 圖片對照表 ───────────────────────────────────────
-  把下方每個 img 後面的檔名換成你自己的圖片，放在 images/ 資料夾裡
-  cls: 'wide'  → 寬版格（橫式圖效果最好）
-  cls: 'tall'  → 高版格（直式圖效果最好）
-  cls: ''      → 正方形格（任何比例都可以）
-  ─────────────────────────────────────────────────────────────
-*/
+/* ─── Gallery build ─── */
 const galleryItems = [
-  // 滿版寬版 × 2（最上方）
+  // 滿版寬版 × 2（最上方）— 產品策略企劃保留原本 lightbox link 行為，不加 modal
   { title: '產品策略企劃', desc: '品牌上市前期策略規劃', img: 'images/pg-01.jpg', cls: 'wide-full', link: 'images/pg-02.jpg' },
-  { title: '企業識別', desc: '企業識別規劃', img: 'images/cis-01.jpg', cls: 'wide-full' },
+  { title: '企業識別', desc: '企業識別規劃', img: 'images/cis-01.jpg', cls: 'wide-full', cat: '品牌設計', year: '2023', modalDesc: '企業識別系統（CIS）規劃，包含企業標誌設計、色彩規範、字體系統與各式應用規範，建立一致的品牌視覺語言。' },
   // 海報 × 4
-  { title: '展覽海報', desc: '醫療產品活動主視覺海報',     img: 'images/poster-01.jpg',   cls: '' },
-  { title: '展覽海報', desc: '醫療產品活動主視覺海報',       img: 'images/poster-02.jpg',   cls: '' },
-  { title: '品牌海報', desc: '企業形象海報',       img: 'images/poster-03.jpg',   cls: '' },
-  { title: '網頁橫幅', desc: '網頁橫幅banner設計',       img: 'images/poster-04.jpg',   cls: '' },
+  { title: '展覽海報', desc: '醫療產品活動主視覺海報', img: 'images/poster-01.jpg', cls: '', cat: '海報設計', year: '2023', modalDesc: '為醫療展覽活動設計之主視覺海報，負責從概念發想到完稿輸出的全程設計作業，並符合展場各尺寸輸出規格。' },
+  { title: '展覽海報', desc: '醫療產品活動主視覺海報', img: 'images/poster-02.jpg', cls: '', cat: '海報設計', year: '2023', modalDesc: '為醫療展覽活動設計之系列海報，與主視覺保持一致的設計語言，應用於展場不同位置輸出。' },
+  { title: '品牌海報', desc: '企業形象海報', img: 'images/poster-03.jpg', cls: '', cat: '海報設計', year: '2022', modalDesc: '企業形象宣傳海報，以品牌色彩與字體系統為核心，呈現專業、值得信賴的視覺形象。' },
+  { title: '網頁橫幅', desc: '網頁橫幅 Banner 設計', img: 'images/poster-04.jpg', cls: '', cat: 'Banner 設計', year: '2023', modalDesc: '網站首頁橫幅 Banner，配合行銷活動主題設計，提供 PC 與手機版多尺寸輸出。' },
   // 型錄 × 2
-  { title: '產品型錄', desc: '醫療產品型錄排版設計',   img: 'images/catalog-01.jpg',  cls: 'wide' },
-  { title: '產品型錄', desc: '工業產品型錄排版設計',       img: 'images/catalog-02.jpg',  cls: 'wide' },
+  { title: '產品型錄', desc: '醫療產品型錄排版設計', img: 'images/catalog-01.jpg', cls: 'wide', cat: '型錄設計', year: '2023', modalDesc: '醫療器材產品型錄，共 32 頁全彩印刷，負責整體排版規劃、圖文配置與印前作業輸出。' },
+  { title: '產品型錄', desc: '工業產品型錄排版設計', img: 'images/catalog-02.jpg', cls: 'wide', cat: '型錄設計', year: '2022', modalDesc: '工業產品型錄設計，以清晰的資訊架構呈現複雜的產品規格，兼顧閱讀流暢度與視覺美感。' },
   // DM × 4
-  { title: '產品DM',  desc: '保健食品DM設計',        img: 'images/dm-01.jpg',       cls: '' },
-  { title: '行銷DM',  desc: '行銷活動DM設計',        img: 'images/dm-02.jpg',       cls: '' },
-  { title: '產品DM',  desc: '醫療產品DM設計',        img: 'images/dm-03.jpg',       cls: '' },
-  { title: '產品DM',  desc: '女鞋保養說明卡設計',        img: 'images/dm-04.jpg',       cls: '' },
+  { title: '產品 DM', desc: '保健食品 DM 設計', img: 'images/dm-01.jpg', cls: '', cat: 'DM 設計', year: '2023', modalDesc: '保健食品宣傳 DM，設計重點在於產品成份的清晰呈現，以及符合品牌調性的色彩運用。' },
+  { title: '行銷 DM', desc: '行銷活動 DM 設計', img: 'images/dm-02.jpg', cls: '', cat: 'DM 設計', year: '2023', modalDesc: '行銷活動宣傳 DM，配合促銷節點設計，強調優惠訴求與視覺吸引力，並符合印刷規格輸出。' },
+  { title: '產品 DM', desc: '醫療產品 DM 設計', img: 'images/dm-03.jpg', cls: '', cat: 'DM 設計', year: '2022', modalDesc: '醫療產品單頁 DM，以簡潔的版面傳達產品功能特點，適用於展場發放與門市陳列。' },
+  { title: '產品 DM', desc: '女鞋保養說明卡設計', img: 'images/dm-04.jpg', cls: '', cat: 'DM 設計', year: '2022', modalDesc: '女鞋品牌保養說明卡，隨產品附贈，設計風格貼合品牌質感，文字層次清晰易讀。' },
   // Landing Page × 2
-  { title: 'Landing Page', desc: '醫療產品活動頁設計', img: 'images/landing-01.jpg', cls: 'wide' },
-  { title: 'Landing Page', desc: '醫療產品活動頁設計', img: 'images/landing-02.jpg', cls: 'wide' },
+  { title: 'Landing Page', desc: '醫療產品活動頁設計', img: 'images/landing-01.jpg', cls: 'wide', cat: 'Landing Page', year: '2023', modalDesc: '醫療產品活動 Landing Page 視覺設計，規劃頁面動線與資訊層次，提升使用者瀏覽與轉換效率。' },
+  { title: 'Landing Page', desc: '醫療產品活動頁設計', img: 'images/landing-02.jpg', cls: 'wide', cat: 'Landing Page', year: '2023', modalDesc: '系列活動 Landing Page，延續品牌視覺語言，配合行銷目標規劃版面結構與視覺重點。' },
   // 產品包裝 × 2
-  { title: '產品包裝', desc: '醫療產品外盒包裝設計',   img: 'images/packaging-01.jpg', cls: '' },
-  { title: '產品包裝', desc: '醫療產品外盒包裝設計',   img: 'images/packaging-02.jpg', cls: '' },
+  { title: '產品包裝', desc: '醫療產品外盒包裝設計', img: 'images/packaging-01.jpg', cls: '', cat: '包裝設計', year: '2022', modalDesc: '醫療產品外盒包裝設計，符合法規標示要求，同時兼顧品牌識別度與貨架視覺吸引力。' },
+  { title: '產品包裝', desc: '醫療產品外盒包裝設計', img: 'images/packaging-02.jpg', cls: '', cat: '包裝設計', year: '2022', modalDesc: '系列產品外盒包裝，延續整體包裝設計語言，提供展開圖與印刷規格完整輸出。' },
   // 網站改版企劃 × 1
-  { title: '網站改版企劃', desc: '品牌官網視覺改版', img: 'images/redesign-01.jpg', cls: '' },
+  { title: '網站改版企劃', desc: '品牌官網視覺改版', img: 'images/redesign-01.jpg', cls: '', cat: '網頁設計', year: '2023', modalDesc: '主導品牌官網視覺改版企劃，重新規劃頁面結構、導覽動線與整體視覺風格，提升品牌形象與使用體驗。' },
   // 飲料集點企劃 × 1
-  { title: '飲料集點企劃', desc: '集點活動視覺規劃', img: 'images/stamp-01.jpg',    cls: '' },
+  { title: '飲料集點企劃', desc: '集點活動視覺規劃', img: 'images/stamp-01.jpg', cls: '', cat: '行銷視覺', year: '2023', modalDesc: '飲料品牌集點活動全案視覺規劃，包含集點卡、海報、門市 POP 與社群素材等多元輸出。' },
 ];
 
 const gg = document.getElementById('gallery-grid');
 galleryItems.forEach(item => {
-  const linkHtml = item.link
-    ? `<span class="g-overlay-link" onclick="openLightbox('${item.link}')">查看作品 →</span>`
-    : '';
+  let actionHtml = '';
+  if (item.link) {
+    // 產品策略企劃：原本的 lightbox 開圖行為
+    actionHtml = `<span class="g-overlay-link" onclick="event.stopPropagation();window.open('${item.link}','_blank')">查看作品 →</span>`;
+  } else if (item.modalDesc) {
+    // 其他卡片：開 Modal
+    const safeTitle = item.title.replace(/'/g, "\\'");
+    const safeCat = (item.cat || '').replace(/'/g, "\\'");
+    const safeYear = (item.year || '').replace(/'/g, "\\'");
+    const safeDesc = item.modalDesc.replace(/'/g, "\\'");
+    actionHtml = `<span class="g-overlay-link" onclick="event.stopPropagation();openModal({img:'${item.img}',cat:'${safeCat}',year:'${safeYear}',title:'${safeTitle}',desc:'${safeDesc}'})">查看作品 →</span>`;
+  }
   gg.innerHTML += `
-    <div class="gallery-item ${item.cls}">
+    <div class="gallery-item ${item.cls}${item.modalDesc && !item.link ? ' has-modal' : ''}">
       <div class="g-placeholder" style="background-image:url('${item.img}');background-size:cover;background-position:center;"></div>
       <div class="g-overlay">
         <div class="g-overlay-title">${item.title}</div>
         <div class="g-overlay-desc">${item.desc}</div>
-        ${linkHtml}
+        ${actionHtml}
       </div>
     </div>`;
 });
